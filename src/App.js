@@ -12,7 +12,7 @@ const App = () => {
 
     // Fetch images from backend when the component mounts
     useEffect(() => {
-        axios.get("http://localhost:4000/api/images")
+        axios.get("https://imgbackend-lfii.onrender.com/api/images")
             .then((response) => {
                 setImages(response.data.images || []); // Adjust based on actual response format
             })
@@ -44,7 +44,7 @@ const App = () => {
         console.log(image.split(',')[1]);
 
         if (image && imageName) {
-            axios.post("http://localhost:4000/api/upload", {
+            axios.post("https://imgbackend-lfii.onrender.com/api/upload", {
                 name: imageName,
                 base64: image.split(',')[1],
                 // Remove the data URL scheme
@@ -67,7 +67,7 @@ const App = () => {
 
     // Handle delete request
     const handleDelete = (id) => {
-        axios.delete(`http://localhost:4000/api/images/${id}`)
+        axios.delete(`https://imgbackend-lfii.onrender.com/api/images/${id}`)
             .then((response) => {
                 setSnackbarMessage("Image deleted successfully!");
                 setOpenSnackbar(true);
