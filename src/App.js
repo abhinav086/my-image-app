@@ -41,11 +41,13 @@ const App = () => {
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(image.split(',')[1]);
 
         if (image && imageName) {
             axios.post("http://localhost:4000/api/upload", {
                 name: imageName,
-                base64: image.split(',')[1], // Remove the data URL scheme
+                base64: image.split(',')[1],
+                // Remove the data URL scheme
             })
             .then((response) => {
                 setSnackbarMessage("Image uploaded successfully!");
@@ -61,6 +63,21 @@ const App = () => {
         } else {
             alert("Please select an image first.");
         }
+    };
+
+    // Handle delete request
+    const handleDelete = (id) => {
+        axios.delete(`http://localhost:4000/api/images/${id}`)
+            .then((response) => {
+                setSnackbarMessage("Image deleted successfully!");
+                setOpenSnackbar(true);
+                setImages(images.filter(img => img._id !== id)); // Remove the deleted image from the state
+            })
+            .catch((error) => {
+                console.error("Error deleting image:", error);
+                setSnackbarMessage("Failed to delete image.");
+                setOpenSnackbar(true);
+            });
     };
 
     return (
@@ -132,6 +149,14 @@ const App = () => {
                                 <Typography variant="body2" align="center">
                                     {img.name}
                                 </Typography>
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    onClick={() => handleDelete(img._id)}
+                                    sx={{ mt: 2 }}
+                                >
+                                    Delete
+                                </Button>
                             </Box>
                         ))
                     ) : (
